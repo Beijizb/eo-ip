@@ -25,10 +25,6 @@
 - **定时任务**：支持定时自动执行 IP 优化
 - **安全认证**：双重认证机制（授权码 + 管理员密码）
 
-## ⚡ 快速开始
-
-> 💡 **新手用户**：建议先阅读 [快速开始指南](QUICKSTART.md)，10分钟即可完成部署！
-
 ## 🚀 快速部署
 
 ### 方法一：直接上传到 Cloudflare Workers（推荐）
@@ -124,12 +120,6 @@ wrangler deploy
 
 ## 📱 通知配置
 
-### 息知通知
-
-1. 注册息知账号：https://xizhi.qqoq.net/
-2. 获取通知 Key
-3. 在系统设置中配置息知通知
-
 ### Telegram Bot 通知
 
 1. 创建 Telegram Bot：
@@ -193,13 +183,6 @@ wrangler deploy
    - 检查 Telegram Bot Token 和 Chat ID
    - 查看系统日志获取详细错误信息
 
-### 调试功能
-
-系统提供调试功能：
-- 点击"调试 IP 获取"查看详细的获取过程
-- 检查各个数据源的访问状态
-- 查看 IP 解析和筛选过程
-
 ## 🔄 更新日志
 
 ### v1.0.0
@@ -208,6 +191,7 @@ wrangler deploy
 - 支持 Cloudflare DNS 更新
 - 支持息知和 Telegram 通知
 - 提供 Web 管理界面
+- 数据来源于公开网络
 
 ## ⭐ 支持项目
 
