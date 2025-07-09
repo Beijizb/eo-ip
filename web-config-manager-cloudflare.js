@@ -39,7 +39,7 @@ const DEFAULT_CONFIG = {
   NOTIFY_SUCCESS: true,
   NOTIFY_ERROR: true,
   ENABLE_AUTH: true,
-  AUTH_PASSWORD: '' // 密码必须通过环境变量设置
+  ADMIN_PASSWORD: '' // 密码必须通过环境变量设置
 };
 
 // 存储键名
@@ -238,12 +238,12 @@ async function authenticateUser(password) {
   }
 
   // 强制要求通过环境变量设置密码
-  if (!config.AUTH_PASSWORD) {
-    await logMessage('error', '认证失败：未设置AUTH_PASSWORD环境变量');
+  if (!config.ADMIN_PASSWORD) {
+    await logMessage('error', '认证失败：未设置ADMIN_PASSWORD环境变量');
     return { success: false, error: '系统未配置认证密码，请联系管理员' };
   }
 
-  if (password === config.AUTH_PASSWORD) {
+  if (password === config.ADMIN_PASSWORD) {
     const payload = {
       authenticated: true,
       exp: Date.now() + 24 * 60 * 60 * 1000, // 24小时有效期
@@ -328,7 +328,7 @@ async function getConfig() {
     NOTIFY_SUCCESS: (val) => val === 'true',
     NOTIFY_ERROR: (val) => val === 'true',
     ENABLE_AUTH: (val) => val === 'true',
-    AUTH_PASSWORD: 'AUTH_PASSWORD',
+    ADMIN_PASSWORD: 'ADMIN_PASSWORD',
     JWT_SECRET: 'JWT_SECRET'
   };
 
@@ -343,7 +343,7 @@ async function getConfig() {
     ...envConfig,
     ...kvConfig, // KV中的非敏感配置会覆盖环境变量中的
     // 确保敏感信息始终来自环境变量，不可被页面修改
-    AUTH_PASSWORD: envConfig.AUTH_PASSWORD,
+    ADMIN_PASSWORD: envConfig.ADMIN_PASSWORD,
     JWT_SECRET: envConfig.JWT_SECRET,
     CLOUDFLARE_API_TOKEN: envConfig.CLOUDFLARE_API_TOKEN,
     BOT_TOKEN: envConfig.BOT_TOKEN,
@@ -752,7 +752,7 @@ async function handleRequest(request) {
       }
       const config = await getConfig();
       // 出于安全考虑，不返回敏感信息
-      const { AUTH_PASSWORD, JWT_SECRET, CLOUDFLARE_API_TOKEN, BOT_TOKEN, ...safeConfig } = config;
+      const { ADMIN_PASSWORD, JWT_SECRET, CLOUDFLARE_API_TOKEN, BOT_TOKEN, ...safeConfig } = config;
       return new Response(JSON.stringify({ success: true, config: safeConfig }), {
         headers: { 'Content-Type': 'application/json' }
       });
