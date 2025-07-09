@@ -71,8 +71,8 @@ wrangler deploy
 
 | 变量名 | 说明 | 示例值 |
 |--------|------|--------|
-| `CF_API_TOKEN` | Cloudflare API 令牌 | `your_api_token_here` |
-| `CF_ZONE_ID` | Cloudflare Zone ID | `32位十六进制字符串` |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare API 令牌 | `your_api_token_here` |
+| `CLOUDFLARE_ZONE_ID` | Cloudflare Zone ID | `32位十六进制字符串` |
 | `JWT_SECRET` | JWT 签名密钥 | `your_jwt_secret_here` |
 | `ADMIN_PASSWORD` | 管理员密码 | `your_admin_password` |
 
@@ -174,8 +174,8 @@ wrangler deploy
    - 系统会自动使用备用 IP 列表
 
 2. **DNS 更新失败**：
-   - 检查 CF_API_TOKEN 权限
-   - 确认 CF_ZONE_ID 正确
+   - 检查 CLOUDFLARE_API_TOKEN 权限
+   - 确认 CLOUDFLARE_ZONE_ID 正确
    - 检查域名是否在 Cloudflare 管理
 
 3. **通知发送失败**：

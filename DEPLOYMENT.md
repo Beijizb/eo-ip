@@ -104,8 +104,8 @@
 
    | 变量名 | 值 | 说明 |
    |--------|----|----|
-   | `CF_API_TOKEN` | 您的 API Token | 第三步获取的 Token |
-   | `CF_ZONE_ID` | 您的 Zone ID | 第三步获取的 Zone ID |
+   | `CLOUDFLARE_API_TOKEN` | 您的 API Token | 第三步获取的 Token |
+   | `CLOUDFLARE_ZONE_ID` | 您的 Zone ID | 第三步获取的 Zone ID |
    | `JWT_SECRET` | 随机字符串 | 用于 JWT 签名，建议32位随机字符 |
    | `ADMIN_PASSWORD` | 您的管理员密码 | 登录系统用的密码 |
 
@@ -220,11 +220,11 @@
 
 ### 常见错误及解决方案
 
-1. **"CF_API_TOKEN环境变量未设置"**
+1. **"CLOUDFLARE_API_TOKEN环境变量未设置"**
    - 检查环境变量是否正确添加
    - 确认变量名拼写正确
 
-2. **"CF_ZONE_ID格式不正确"**
+2. **"CLOUDFLARE_ZONE_ID格式不正确"**
    - 确认 Zone ID 是32位十六进制字符串
    - 检查是否有多余的空格
 
