@@ -40,7 +40,7 @@
    - 输入 Worker 名称（如：ip-optimizer）
 
 3. **上传代码**
-   - 将 `worker-bundle-simple.js` 文件内容完整复制
+   - 将 `web-config-manager-cloudflare.js` 文件内容完整复制
    - 粘贴到 Cloudflare Workers 编辑器中
    - 点击 "保存并部署"
 
@@ -57,7 +57,7 @@ wrangler login
 wrangler init ip-optimizer
 
 # 复制代码文件
-cp worker-bundle-simple.js ./src/index.js
+cp web-config-manager-cloudflare.js ./src/index.js
 
 # 部署
 wrangler deploy
