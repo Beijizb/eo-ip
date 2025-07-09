@@ -69,12 +69,12 @@ wrangler deploy
 
 ### 必需环境变量
 
-| 变量名 | 说明 | 示例值 |
-|--------|------|--------|
-| `CLOUDFLARE_API_TOKEN` | Cloudflare API 令牌 | `your_api_token_here` |
-| `CLOUDFLARE_ZONE_ID` | Cloudflare Zone ID | `32位十六进制字符串` |
-| `JWT_SECRET` | JWT 签名密钥 | `your_jwt_secret_here` |
-| `ADMIN_PASSWORD` | 管理员密码 | `your_admin_password` |
+| 变量名 | 类型 | 说明 | 示例值 |
+|--------|------|------|--------|
+| `CLOUDFLARE_API_TOKEN` | 密钥 | Cloudflare API 令牌 | `your_api_token_here` |
+| `CLOUDFLARE_ZONE_ID` | 文本 | Cloudflare Zone ID | `32位十六进制字符串` |
+| `JWT_SECRET` | 密钥 | JWT 签名密钥 | `your_jwt_secret_here` |
+| `ADMIN_PASSWORD` | 密钥 | 管理员密码 | `your_admin_password` |
 
 ### 获取 Cloudflare API 信息
 

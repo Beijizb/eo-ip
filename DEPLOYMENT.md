@@ -102,12 +102,12 @@
 
 2. **必需的环境变量**
 
-   | 变量名 | 值 | 说明 |
-   |--------|----|----|
-   | `CLOUDFLARE_API_TOKEN` | 您的 API Token | 第三步获取的 Token |
-   | `CLOUDFLARE_ZONE_ID` | 您的 Zone ID | 第三步获取的 Zone ID |
-   | `JWT_SECRET` | 随机字符串 | 用于 JWT 签名，建议32位随机字符 |
-   | `ADMIN_PASSWORD` | 您的管理员密码 | 登录系统用的密码 |
+    | 变量名 | 类型 | 值 | 说明 |
+    |--------|------|----|----|
+    | `CLOUDFLARE_API_TOKEN` | 密钥 | 您的 API Token | 第三步获取的 Token |
+    | `CLOUDFLARE_ZONE_ID` | 文本 | 您的 Zone ID | 第三步获取的 Zone ID |
+    | `JWT_SECRET` | 密钥 | 随机字符串 | 用于 JWT 签名，建议32位随机字符 |
+    | `ADMIN_PASSWORD` | 密钥 | 您的管理员密码 | 登录系统用的密码 |
 
 3. **生成 JWT_SECRET**
    - 可以使用在线工具生成：[https://www.random.org/strings/](https://www.random.org/strings/)
