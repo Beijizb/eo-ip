@@ -938,12 +938,21 @@ async function handleRequest(request) {
       stack: error.stack,
       path, method, client_ip: clientIP
     }, requestId);
-    
-    return new Response(JSON.stringify({
+
+    const config = await getConfig();
+    const errorResponse = {
       success: false,
-      error: '服务器内部错误',
+      error: config.LOG_LEVEL === 'debug'
+        ? `服务器内部错误: ${error.message}`
+        : '服务器内部错误',
       requestId
-    }), {
+    };
+
+    if (config.LOG_LEVEL === 'debug') {
+      errorResponse.stack = error.stack;
+    }
+
+    return new Response(JSON.stringify(errorResponse), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
