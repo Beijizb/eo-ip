@@ -1225,8 +1225,8 @@ filterStatus.textContent = '正在筛选 ' + ipList.length + ' 个IP...';
                 });
                 const result = await response.json();
                 if (result.success) {
-                    filterStatus.textContent = \`筛选完成：${result.validIps} 个有效IP，${result.addedIps} 个已添加\`;
-                    showMessage(\`IP筛选完成！有效IP: ${result.validIps}个，已添加: ${result.addedIps}个\`, 'success');
+                    filterStatus.textContent = \`筛选完成：\${result.validIps} 个有效IP，\${result.addedIps} 个已添加\`;
+                    showMessage(\`IP筛选完成！有效IP: \${result.validIps}个，已添加: \${result.addedIps}个\`, 'success');
                     manualIpsTextarea.value = '';
                 } else {
                     filterStatus.textContent = '筛选失败';
