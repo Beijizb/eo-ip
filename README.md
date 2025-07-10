@@ -18,9 +18,9 @@
 
 ## 🌟 主要功能
 
-- **智能 IP 获取**自动获取优选 IP 地址
+- **智能 IP 获取**：自动获取优选 IP 地址
 - **自动 DNS 更新**：支持 Cloudflare DNS A 记录自动更新
-- **多种通知方式**： Telegram Bot 通知
+- **多种通知方式**：支持 Telegram Bot 通知
 - **Web 管理界面**：提供友好的 Web 管理界面
 - **定时任务**：支持定时自动执行 IP 优化
 - **安全认证**：双重认证机制（授权码 + 管理员密码）
@@ -182,6 +182,12 @@ wrangler deploy
    - 检查息知 Key 是否正确
    - 检查 Telegram Bot Token 和 Chat ID
    - 查看系统日志获取详细错误信息
+4. **无法打开 Web 管理界面或登录页面显示“服务器内部错误”**：
+   - 刷新页面或清除浏览器缓存后重试
+   - 确认网络连接稳定，并排除本地代理或防火墙影响
+   - 检查环境变量（`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ZONE_ID`, `JWT_SECRET`, `ADMIN_PASSWORD`）是否完整
+   - 检查 `IP_STORE` KV 命名空间是否已创建并绑定到 Worker
+   - 如需更多错误信息，可将 `LOG_LEVEL` 设置为 `debug`，然后在 Cloudflare Dashboard 查看日志
 
 ## 🔄 更新日志
 
