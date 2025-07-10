@@ -186,7 +186,7 @@ wrangler deploy
    - 刷新页面或清除浏览器缓存后重试
    - 确认网络连接稳定，并排除本地代理或防火墙影响
    - 检查环境变量（`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ZONE_ID`, `JWT_SECRET`, `ADMIN_PASSWORD`）是否完整
-   - 检查 `IP_STORE` KV 命名空间是否已创建并绑定到 Worker
+   - 检查 `IP_STORE` KV 命名空间是否已创建并绑定到 Worker（未绑定将导致页面报错）
    - 如需更多错误信息，可将 `LOG_LEVEL` 设置为 `debug`，然后在 Cloudflare Dashboard 查看日志
 
 ## 🔄 更新日志

@@ -115,33 +115,50 @@ function generateRequestId() {
 // 在顶层作用域定义一个变量来缓存密钥，以减少对KV的频繁读取
 let jwtSecretCache;
 
+/**
+ * Retrieve the secret key used for JWT signing.
+ *
+ * Preference order:
+ * 1. Environment variable `JWT_SECRET` if provided
+ * 2. Cached value in memory
+ * 3. Value stored in KV (if KV binding exists)
+ * 4. Generate a new random secret (persisting to KV when possible)
+ */
+
 async function getSecretKey() {
-  // 优先使用内存缓存
+  // 1. 环境变量提供的密钥
+  if (globalThis.JWT_SECRET) {
+    jwtSecretCache = globalThis.JWT_SECRET;
+    return jwtSecretCache;
+  }
+
+  // 2. 内存缓存
   if (jwtSecretCache) {
     return jwtSecretCache;
   }
 
   const KV_SECRET_KEY = 'jwt_secret';
 
-  // 尝试从KV存储中获取密钥
-  let secret = await WORKER_CONFIG.get(KV_SECRET_KEY);
-
-  if (secret) {
-    jwtSecretCache = secret; // 缓存到内存
-    return secret;
+  // 3. 从KV读取密钥（如果绑定存在）
+  if (typeof WORKER_CONFIG !== 'undefined') {
+    const secretFromKv = await WORKER_CONFIG.get(KV_SECRET_KEY);
+    if (secretFromKv) {
+      jwtSecretCache = secretFromKv;
+      return secretFromKv;
+    }
   }
 
-  // 如果KV中没有密钥，则生成一个新的、高强度的密钥
-  // 使用Web Crypto API生成安全的随机字节
+  // 4. 生成新的密钥
   const array = new Uint8Array(32);
   crypto.getRandomValues(array);
-  secret = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+  const secret = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
 
-  // 将新密钥存入KV，并设置一个较长的过期时间（例如一年），或不设置使其永久有效
-  // 同时将其存入内存缓存
-  await WORKER_CONFIG.put(KV_SECRET_KEY, secret);
+  // 尝试写入KV（如果绑定存在）
+  if (typeof WORKER_CONFIG !== 'undefined') {
+    await WORKER_CONFIG.put(KV_SECRET_KEY, secret);
+  }
+
   jwtSecretCache = secret;
-  
   console.log('已生成并持久化新的JWT密钥。');
 
   return secret;
@@ -770,6 +787,13 @@ async function handleRequest(request) {
         const newConfig = await request.json();
 
         // 获取KV中已有的配置
+        if (typeof WORKER_CONFIG === 'undefined') {
+          return new Response(JSON.stringify({ success: false, error: '未配置KV存储' }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
         const kvConfigStr = await WORKER_CONFIG.get('worker_config');
         const currentKvConfig = kvConfigStr ? JSON.parse(kvConfigStr) : {};
 
@@ -858,6 +882,13 @@ async function handleRequest(request) {
         }
         
         // 将有效IP添加到现有配置中（这里可以根据实际需求调整存储逻辑）
+        if (typeof WORKER_CONFIG === 'undefined') {
+          return new Response(JSON.stringify({ success: false, error: '未配置KV存储' }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
         const kvConfigStr = await WORKER_CONFIG.get('worker_config');
         const currentKvConfig = kvConfigStr ? JSON.parse(kvConfigStr) : {};
         
