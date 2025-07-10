@@ -80,3 +80,14 @@
 
 如需更深入的说明，可参阅仓库中的 [DEPLOYMENT.md](DEPLOYMENT.md) 文档。
 
+## 解析微测网 IP
+
+仓库中新增脚本 `parse-wetest-ip.js`，可从 [WeTest](https://www.wetest.vip/page/edgeone/address_v4.html) 获取优选 IP 列表。运行：
+
+```bash
+npm install
+node parse-wetest-ip.js
+```
+
+脚本会输出包含线路、IP、带宽等信息的 JSON，方便后续筛选或自动解析 DNS。
+
