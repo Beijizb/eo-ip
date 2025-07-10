@@ -18,12 +18,12 @@
 
 ## 🌟 主要功能
 
-- **智能 IP 获取**：自动获取优选 IP 地址
-- **自动 DNS 更新**：支持 Cloudflare DNS A 记录自动更新
-- **多种通知方式**：支持 Telegram Bot 通知
-- **Web 管理界面**：提供友好的 Web 管理界面
-- **定时任务**：支持定时自动执行 IP 优化
-- **安全认证**：双重认证机制（授权码 + 管理员密码）
+ - **智能 IP 获取**：自动测试并选择最优 IP，确保访问速度稳定
+ - **自动 DNS 更新**：支持 Cloudflare DNS A 记录自动更新，可自定义 TTL
+ - **多种通知方式**：支持 Telegram Bot、息知等多种渠道，及时获取更新
+ - **Web 管理界面**：基于 React 的响应式界面，可在浏览器实时调整配置
+ - **定时任务**：通过 Cron 表达式定期执行 IP 优化
+ - **安全认证**：双重认证机制（授权码 + 管理员密码），数据加密存储
 
 ## 🚀 快速部署
 
@@ -136,9 +136,9 @@ wrangler deploy
 
 ### 首次登录
 
-1. 访问您的 Worker 域名
-2. 输入授权码：
-3. 输入管理员密码（环境变量中设置的密码）
+1. 访问您的 Worker 域名（如 `https://ip-optimizer.<your-subdomain>.workers.dev`）
+2. 根据提示输入部署时设置的授权码以验证身份
+3. 再输入 `ADMIN_PASSWORD` 对应的管理员密码即可登录
 
 ### 基本配置
 
@@ -183,11 +183,12 @@ wrangler deploy
    - 检查 Telegram Bot Token 和 Chat ID
    - 查看系统日志获取详细错误信息
 4. **无法打开 Web 管理界面或登录页面显示“服务器内部错误”**：
-   - 刷新页面或清除浏览器缓存后重试
-   - 确认网络连接稳定，并排除本地代理或防火墙影响
-   - 检查环境变量（`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ZONE_ID`, `JWT_SECRET`, `ADMIN_PASSWORD`）是否完整
-   - 检查 `IP_STORE` KV 命名空间是否已创建并绑定到 Worker
-   - 如需更多错误信息，可将 `LOG_LEVEL` 设置为 `debug`，然后在 Cloudflare Dashboard 查看日志
+    - 刷新页面或清除浏览器缓存后重试
+    - 确认网络连接稳定，并排除本地代理或防火墙影响
+    - 检查环境变量（`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ZONE_ID`, `JWT_SECRET`, `ADMIN_PASSWORD`）是否完整
+    - 检查 `IP_STORE` KV 命名空间是否已创建并绑定到 Worker
+    - 确认域名 DNS 记录已正确指向 Cloudflare Workers
+    - 如需更多错误信息，可将 `LOG_LEVEL` 设置为 `debug`，然后在 Cloudflare Dashboard 或使用 `wrangler tail` 查看实时日志
 
 ## 🔄 更新日志
 
