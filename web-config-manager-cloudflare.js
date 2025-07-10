@@ -23,6 +23,7 @@ const DEFAULT_CONFIG = {
     }
   ],
   WEICE_URL: 'https://www.weicede.com/index/api/node_list.html',
+  WETEST_URL: 'https://www.wetest.vip/page/edgeone/address_v4.html',
   MAX_IPS: 5,
   TIMEOUT: 2000,
   UPDATE_INTERVAL: '0 */6 * * *',
@@ -334,6 +335,7 @@ async function getConfig() {
       }
     },
     WEICE_URL: 'WEICE_URL',
+    WETEST_URL: 'WETEST_URL',
     MAX_IPS: (val) => parseInt(val, 10) || envConfig.MAX_IPS,
     TIMEOUT: (val) => parseInt(val, 10) || envConfig.TIMEOUT,
     UPDATE_INTERVAL: 'UPDATE_INTERVAL',
@@ -419,6 +421,34 @@ async function logSecurityEvent(event, clientIP, metadata = {}) {
     timestamp: Date.now(),
     ...metadata
   });
+}
+
+// 从 WeTest 获取优选 IP 列表
+async function fetchWeTestIPs() {
+  const config = await getConfig();
+  const url = config.WETEST_URL || 'https://www.wetest.vip/page/edgeone/address_v4.html';
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
+  const html = await res.text();
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const rows = doc.querySelectorAll('div.cname-table-wrapper table tbody tr');
+  const data = [];
+  rows.forEach(tr => {
+    const cells = tr.querySelectorAll('td');
+    data.push({
+      line: cells[0]?.textContent.trim() || '',
+      ip: cells[1]?.textContent.trim() || '',
+      bandwidth: cells[2]?.textContent.trim() || '',
+      speed: cells[3]?.textContent.trim() || '',
+      latency: cells[4]?.textContent.trim() || '',
+      region: cells[5]?.textContent.trim() || '',
+      updated: cells[6]?.textContent.trim() || ''
+    });
+  });
+  return data;
 }
 
 // 登录页面生成
@@ -814,6 +844,29 @@ async function handleRequest(request) {
       }
     }
 
+    // API: 获取 WeTest IP 列表
+    if (path === '/api/wetest-ip-list' && method === 'GET') {
+      const isAuthenticated = await verifyAuth(request);
+      if (!isAuthenticated) {
+        return new Response(JSON.stringify({ success: false, error: '未授权' }), {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+      try {
+        const list = await fetchWeTestIPs();
+        return new Response(JSON.stringify({ success: true, list }), {
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } catch (error) {
+        await logMessage('error', 'wetest_fetch_failed', { error: error.message });
+        return new Response(JSON.stringify({ success: false, error: '获取失败：' + error.message }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
     // API: 手动筛选IP
     if (path === '/api/filter-ips' && method === 'POST') {
       const isAuthenticated = await verifyAuth(request);
@@ -1049,6 +1102,8 @@ async function generateAdminPage() {
                 <div class="form-grid">
                     <label for="WEICE_URL">微测网URL:</label>
                     <input type="text" id="WEICE_URL" name="WEICE_URL">
+                    <label for="WETEST_URL">WeTest URL:</label>
+                    <input type="text" id="WETEST_URL" name="WETEST_URL">
                     <label for="MAX_IPS">最大IP数量:</label>
                     <input type="number" id="MAX_IPS" name="MAX_IPS">
                     <label for="TIMEOUT">超时时间 (ms):</label>
@@ -1123,6 +1178,7 @@ async function generateAdminPage() {
                     const config = result.config;
                     form.DOMAINS.value = JSON.stringify(config.DOMAINS, null, 2);
                     form.WEICE_URL.value = config.WEICE_URL;
+                    form.WETEST_URL.value = config.WETEST_URL;
                     form.MAX_IPS.value = config.MAX_IPS;
                     form.TIMEOUT.value = config.TIMEOUT;
                     form.UPDATE_INTERVAL.value = config.UPDATE_INTERVAL;
@@ -1149,6 +1205,7 @@ async function generateAdminPage() {
                 const data = {
                     DOMAINS: JSON.parse(form.DOMAINS.value),
                     WEICE_URL: form.WEICE_URL.value,
+                    WETEST_URL: form.WETEST_URL.value,
                     MAX_IPS: parseInt(form.MAX_IPS.value),
                     TIMEOUT: parseInt(form.TIMEOUT.value),
                     UPDATE_INTERVAL: form.UPDATE_INTERVAL.value,
