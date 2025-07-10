@@ -82,12 +82,12 @@
 
 ## 解析微测网 IP
 
-仓库中新增脚本 `parse-wetest-ip.js`，可从 [WeTest](https://www.wetest.vip/page/edgeone/address_v4.html) 获取优选 IP 列表。运行：
+现在无需单独运行脚本，Worker 已内置从 [WeTest](https://www.wetest.vip/page/edgeone/address_v4.html) 解析 IP 的功能。
+直接访问 API 即可获取列表：
 
 ```bash
-npm install
-node parse-wetest-ip.js
+curl https://<your-worker>/api/wetest-ip-list
 ```
 
-脚本会输出包含线路、IP、带宽等信息的 JSON，方便后续筛选或自动解析 DNS。
+API 返回包含线路、IP、带宽等字段的 JSON，方便后续筛选或自动解析 DNS。
 
